@@ -30,200 +30,140 @@
     overflow-x: hidden;
   }
 
-  /* ── STATUS BAR ── */
   #status-bar {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(10,10,15,0.9);
+    background: rgba(10,10,15,0.95);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    padding: 10px 14px;
+    padding: 9px 14px;
     display: flex; align-items: center; gap: 8px;
   }
   #status-dot {
     width: 8px; height: 8px; border-radius: 50%;
-    background: var(--muted); flex-shrink: 0;
-    transition: background 0.3s;
+    background: var(--muted); flex-shrink: 0; transition: background 0.4s;
   }
   #status-dot.locating { background: #f0c040; animation: pulse 1s infinite; }
   #status-dot.ready    { background: var(--accent-in); }
   #status-dot.error    { background: var(--accent-out); }
   #location-text {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 10.5px; color: var(--muted);
-    flex: 1; overflow: hidden;
-    white-space: nowrap; text-overflow: ellipsis;
+    font-size: 10px; color: var(--muted);
+    flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
   }
   #location-text.ready { color: #cccce0; }
-  #clock {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px; color: var(--accent-blue); flex-shrink: 0;
-  }
+  #clock { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--accent-blue); flex-shrink: 0; }
 
-  /* ── APP ── */
-  #app {
-    padding-top: 52px;
-    display: flex; flex-direction: column;
-    align-items: center; min-height: 100vh;
-  }
+  #app { padding-top: 50px; display: flex; flex-direction: column; align-items: center; }
 
-  /* ── GREETING ── */
-  #greeting-block {
-    width: 100%; max-width: 420px;
-    padding: 18px 20px 0; text-align: center;
-  }
-  #emp-name { font-size: 21px; font-weight: 600; }
+  #greeting-block { width: 100%; max-width: 420px; padding: 14px 20px 0; text-align: center; }
+  #emp-name { font-size: 20px; font-weight: 600; }
   #emp-name span { color: var(--accent-in); }
-  #greeting-sub { font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  #greeting-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
 
-  /* ── CAMERA FRAME ── */
+  #ready-pills { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+  .pill {
+    font-size: 10px; font-family: 'IBM Plex Mono', monospace;
+    padding: 3px 10px; border-radius: 20px;
+    border: 1px solid var(--border); color: var(--muted);
+    display: flex; align-items: center; gap: 5px; transition: all 0.3s;
+  }
+  .pill.ok  { border-color: var(--accent-in);  color: var(--accent-in); }
+  .pill.err { border-color: var(--accent-out); color: var(--accent-out); }
+  .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink:0; }
+
   #camera-wrap {
-    width: calc(100% - 40px); max-width: 420px;
-    margin: 14px 20px 0;
-    position: relative;
-    border-radius: 16px; overflow: hidden;
-    border: 1px solid var(--border);
-    background: #000;
-    aspect-ratio: 3/4;
+    width: calc(100% - 32px); max-width: 420px;
+    margin: 12px 16px 0;
+    position: relative; border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--border); background: #000; aspect-ratio: 3/4;
   }
-  #video {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
-    transform: scaleX(-1);
-  }
+  #video { width: 100%; height: 100%; object-fit: cover; display: block; transform: scaleX(-1); }
 
-  /* corners */
-  .corner {
-    position: absolute; width: 22px; height: 22px;
-    border-color: var(--accent-blue); border-style: solid;
-    opacity: 0.8; z-index: 5;
-  }
-  .corner.tl { top:12px; left:12px;   border-width:2px 0 0 2px; border-radius:4px 0 0 0; }
-  .corner.tr { top:12px; right:12px;  border-width:2px 2px 0 0; border-radius:0 4px 0 0; }
-  .corner.bl { bottom:12px; left:12px;  border-width:0 0 2px 2px; border-radius:0 0 0 4px; }
-  .corner.br { bottom:12px; right:12px; border-width:0 2px 2px 0; border-radius:0 0 4px 0; }
+  .corner { position: absolute; width: 20px; height: 20px; border-color: var(--accent-blue); border-style: solid; opacity: 0.8; z-index: 5; }
+  .corner.tl { top:10px; left:10px;   border-width:2px 0 0 2px; border-radius:4px 0 0 0; }
+  .corner.tr { top:10px; right:10px;  border-width:2px 2px 0 0; border-radius:0 4px 0 0; }
+  .corner.bl { bottom:10px; left:10px;  border-width:0 0 2px 2px; border-radius:0 0 0 4px; }
+  .corner.br { bottom:10px; right:10px; border-width:0 2px 2px 0; border-radius:0 0 4px 0; }
 
-  /* scan line */
   #scan-line {
     position: absolute; left:0; right:0; height:1px;
     background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
     animation: scan 3s ease-in-out infinite; z-index:5;
   }
-  @keyframes scan {
-    0%   { top:12px; opacity:0; }
-    10%  { opacity:1; }
-    90%  { opacity:1; }
-    100% { top:calc(100% - 12px); opacity:0; }
-  }
+  @keyframes scan { 0%{top:10px;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:calc(100% - 10px);opacity:0} }
 
-  /* live badge */
   #live-badge {
-    position:absolute; top:14px; right:14px;
-    background:rgba(255,77,109,0.15);
-    border:1px solid var(--accent-out);
-    color:var(--accent-out);
-    font-family:'IBM Plex Mono',monospace;
-    font-size:10px; font-weight:600;
-    padding:2px 8px; border-radius:4px; z-index:6;
-    display:flex; align-items:center; gap:5px;
+    position:absolute; top:12px; right:12px;
+    background:rgba(255,77,109,0.15); border:1px solid var(--accent-out);
+    color:var(--accent-out); font-family:'IBM Plex Mono',monospace;
+    font-size:9px; font-weight:600; padding:2px 7px; border-radius:4px; z-index:6;
+    display:flex; align-items:center; gap:4px;
   }
-  #live-badge::before {
-    content:''; width:6px; height:6px; border-radius:50%;
-    background:var(--accent-out); animation:pulse 1s infinite;
-  }
+  #live-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--accent-out); animation:pulse 1s infinite; }
 
-  /* loading */
   #cam-loading {
-    position:absolute; inset:0;
-    display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    background:var(--surface); z-index:10; gap:12px;
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; background:var(--surface); z-index:10; gap:10px;
   }
-  .spinner {
-    width:36px; height:36px;
-    border:2px solid var(--border);
-    border-top-color:var(--accent-blue);
-    border-radius:50%;
-    animation:spin 0.8s linear infinite;
-  }
-  #cam-loading p { font-size:13px; color:var(--muted); }
+  .spinner { width:32px; height:32px; border:2px solid var(--border); border-top-color:var(--accent-blue); border-radius:50%; animation:spin 0.8s linear infinite; }
+  #cam-loading p { font-size:12px; color:var(--muted); }
 
-  /* preview */
-  #preview-wrap {
-    position:absolute; inset:0; z-index:20; display:none;
-  }
-  #preview-img { width:100%; height:100%; object-fit:cover; }
+  #preview-wrap { position:absolute; inset:0; z-index:20; display:none; }
+  #preview-img { width:100%; height:100%; object-fit:cover; display:block; }
   #retake-btn {
-    position:absolute; top:12px; left:12px;
-    background:rgba(10,10,15,0.85);
-    border:1px solid var(--border);
-    color:var(--text); font-size:12px;
-    padding:6px 14px; border-radius:8px;
-    cursor:pointer; z-index:25;
-    font-family:'DM Sans',sans-serif;
+    position:absolute; top:10px; left:10px; background:rgba(10,10,15,0.85);
+    border:1px solid var(--border); color:var(--text); font-size:11px;
+    padding:5px 12px; border-radius:8px; cursor:pointer; z-index:25; font-family:'DM Sans',sans-serif;
   }
 
-  /* ── BUTTONS ── */
-  #btn-row {
-    width:calc(100% - 40px); max-width:420px;
-    margin:14px 20px 30px;
-    display:grid; grid-template-columns:1fr 1fr; gap:12px;
-  }
+  #btn-row { width:calc(100% - 32px); max-width:420px; margin:12px 16px 0; display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .att-btn {
-    height:56px; border-radius:14px;
-    border:none; cursor:pointer;
-    font-family:'DM Sans',sans-serif;
-    font-size:15px; font-weight:600;
-    display:flex; align-items:center; justify-content:center; gap:8px;
-    transition:transform 0.15s, box-shadow 0.2s;
+    height:54px; border-radius:14px; border:none; cursor:pointer;
+    font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600;
+    display:flex; align-items:center; justify-content:center; gap:6px;
+    transition:transform 0.15s, box-shadow 0.2s, opacity 0.3s;
   }
-  .att-btn:active  { transform:scale(0.96); }
-  .att-btn:disabled { opacity:0.35; cursor:not-allowed; transform:none; }
+  .att-btn:active:not(:disabled) { transform:scale(0.96); }
+  .att-btn:disabled { opacity:0.25; cursor:not-allowed; box-shadow:none !important; }
+  #btn-in  { background:var(--accent-in);  color:#001a0d; box-shadow:0 0 20px rgba(0,229,160,0.3); }
+  #btn-out { background:var(--accent-out); color:#1a0008; box-shadow:0 0 20px rgba(255,77,109,0.3); }
+  #btn-in:hover:not(:disabled)  { box-shadow:0 0 30px rgba(0,229,160,0.5); }
+  #btn-out:hover:not(:disabled) { box-shadow:0 0 30px rgba(255,77,109,0.5); }
+  .btn-spinner { width:16px; height:16px; border:2px solid rgba(0,0,0,0.2); border-top-color:rgba(0,0,0,0.7); border-radius:50%; animation:spin 0.7s linear infinite; }
 
-  #btn-in {
-    background:var(--accent-in); color:#001a0d;
-    box-shadow:0 0 24px rgba(0,229,160,0.25);
+  #last-submission {
+    width:calc(100% - 32px); max-width:420px; margin:10px 16px 0;
+    background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 14px; display:none;
   }
-  #btn-in:hover:not(:disabled) { box-shadow:0 0 36px rgba(0,229,160,0.45); }
-
-  #btn-out {
-    background:var(--accent-out); color:#1a0008;
-    box-shadow:0 0 24px rgba(255,77,109,0.25);
+  #last-submission-label { font-size:10px; color:var(--muted); font-family:'IBM Plex Mono',monospace; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; }
+  #last-submission-info  { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  #last-submission-text  { font-size:13px; font-weight:500; flex:1; }
+  #share-btn {
+    background:#25D366; border:none; border-radius:10px;
+    color:#fff; font-size:12px; font-weight:600; padding:7px 13px; cursor:pointer;
+    display:flex; align-items:center; gap:5px; font-family:'DM Sans',sans-serif; flex-shrink:0;
   }
-  #btn-out:hover:not(:disabled) { box-shadow:0 0 36px rgba(255,77,109,0.45); }
+  #share-btn:active { opacity:0.8; }
 
-  .btn-spinner {
-    width:18px; height:18px;
-    border:2px solid rgba(0,0,0,0.2);
-    border-top-color:rgba(0,0,0,0.7);
-    border-radius:50%; animation:spin 0.7s linear infinite;
-  }
-
-  /* ── TOAST ── */
   #toast {
-    position:fixed; bottom:28px; left:50%;
-    transform:translateX(-50%) translateY(20px);
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:12px; padding:11px 20px;
-    font-size:13px; color:var(--text);
-    opacity:0; transition:all 0.3s; z-index:200;
-    white-space:nowrap; pointer-events:none;
-    max-width:90vw; text-align:center;
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(16px);
+    background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 18px;
+    font-size:12px; color:var(--text); opacity:0; transition:all 0.3s; z-index:200;
+    white-space:nowrap; pointer-events:none; max-width:88vw; text-align:center;
   }
   #toast.show    { opacity:1; transform:translateX(-50%) translateY(0); }
   #toast.success { border-color:var(--accent-in);  color:var(--accent-in); }
   #toast.error   { border-color:var(--accent-out); color:var(--accent-out); }
 
-  /* ── HIDDEN CANVAS ── */
   #overlay-canvas { display:none; }
+  #bottom-pad { height:28px; }
 
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
   @keyframes spin  { to{transform:rotate(360deg)} }
 </style>
 </head>
 <body>
 
-<!-- STATUS BAR -->
 <div id="status-bar">
   <div id="status-dot" class="locating"></div>
   <div id="location-text">Fetching location…</div>
@@ -231,10 +171,14 @@
 </div>
 
 <div id="app">
-
   <div id="greeting-block">
-    <div id="emp-name">Welcome, <span id="name-display">Loading…</span></div>
-    <div id="greeting-sub">Fetching your details…</div>
+    <div id="emp-name">Welcome, <span id="name-display">…</span></div>
+    <div id="greeting-sub"></div>
+    <div id="ready-pills">
+      <div class="pill" id="pill-location"><div class="pill-dot"></div>Location</div>
+      <div class="pill" id="pill-name"><div class="pill-dot"></div>Name</div>
+      <div class="pill" id="pill-camera"><div class="pill-dot"></div>Camera</div>
+    </div>
   </div>
 
   <div id="camera-wrap">
@@ -242,15 +186,9 @@
     <div class="corner bl"></div><div class="corner br"></div>
     <div id="scan-line"></div>
     <div id="live-badge">LIVE</div>
-
-    <div id="cam-loading">
-      <div class="spinner"></div>
-      <p>Starting camera…</p>
-    </div>
-
+    <div id="cam-loading"><div class="spinner"></div><p>Starting camera…</p></div>
     <video id="video" autoplay playsinline muted></video>
     <canvas id="overlay-canvas"></canvas>
-
     <div id="preview-wrap">
       <img id="preview-img" alt="captured">
       <button id="retake-btn" onclick="retakePhoto()">↩ Retake</button>
@@ -258,324 +196,300 @@
   </div>
 
   <div id="btn-row">
-    <button class="att-btn" id="btn-in"  onclick="submitAttendance('IN')"  disabled>
-      <span>▶</span> IN
-    </button>
-    <button class="att-btn" id="btn-out" onclick="submitAttendance('OUT')" disabled>
-      <span>■</span> OUT
-    </button>
+    <button class="att-btn" id="btn-in"  onclick="submitAttendance('IN Time')"  disabled>▶ IN Time</button>
+    <button class="att-btn" id="btn-out" onclick="submitAttendance('OUT Time')" disabled>■ OUT Time</button>
   </div>
 
-</div>
+  <div id="last-submission">
+    <div id="last-submission-label">Last Submission</div>
+    <div id="last-submission-info">
+      <div id="last-submission-text"></div>
+      <button id="share-btn" onclick="shareOnWhatsApp()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Share
+      </button>
+    </div>
+  </div>
 
+  <div id="bottom-pad"></div>
+</div>
 <div id="toast"></div>
 
 <script>
-// ─────────────────────────────────────────
-//  STATE
-// ─────────────────────────────────────────
 var S = {
-  name: 'Employee', email: '',
-  lat: null, lng: null,
-  address: 'Fetching…',
-  locationReady: false, cameraReady: false,
-  stream: null, submitting: false,
-  capturedBase64: null
+  name:'', email:'', lat:null, lng:null, address:'',
+  locationReady:false, nameReady:false, cameraReady:false,
+  submitting:false, capturedBase64:null,
+  lastType:'', lastTime:'', lastAddress:''
 };
 
-// ─────────────────────────────────────────
-//  CLOCK + DATE
-// ─────────────────────────────────────────
-function tickClock() {
-  document.getElementById('clock').textContent =
-    new Date().toLocaleTimeString('en-IN', { hour12: false });
+// Clock
+function tickClock(){ document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-IN',{hour12:false}); }
+setInterval(tickClock,1000); tickClock();
+document.getElementById('greeting-sub').textContent = new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+// Pills
+function setPill(id,status){
+  var el=document.getElementById(id);
+  el.classList.remove('ok','err');
+  if(status==='ok') el.classList.add('ok');
+  if(status==='err') el.classList.add('err');
 }
-setInterval(tickClock, 1000); tickClock();
 
-document.getElementById('greeting-sub').textContent =
-  new Date().toLocaleDateString('en-IN', {
-    weekday:'long', day:'numeric', month:'long', year:'numeric'
-  });
+// Check all 3 ready → enable buttons
+function checkReady(){
+  var ready = S.locationReady && S.nameReady && S.cameraReady;
+  document.getElementById('btn-in').disabled  = !ready;
+  document.getElementById('btn-out').disabled = !ready;
+}
 
-// ─────────────────────────────────────────
-//  LOAD NAME — from Apps Script via URL param OR fetch
-// ─────────────────────────────────────────
-function loadName() {
-  // Try URL param first (e.g. ?name=Rahul)
+// Load name from URL param or Apps Script
+function loadName(){
   var params = new URLSearchParams(window.location.search);
+  S.email = params.get('email') || '';
   var n = params.get('name');
-  if (n) { setName(n); return; }
-
-  // Try fetching from Apps Script (GET with email)
-  var email = params.get('email') || '';
-  if (email && typeof APPS_SCRIPT_URL !== 'undefined') {
-    fetch(APPS_SCRIPT_URL + '?action=getName&email=' + encodeURIComponent(email))
-      .then(function(r){ return r.json(); })
-      .then(function(d){ setName(d.name || 'Employee'); })
+  if(n){ setName(n); return; }
+  if(S.email && typeof APPS_SCRIPT_URL!=='undefined'){
+    fetch(APPS_SCRIPT_URL+'?action=getName&email='+encodeURIComponent(S.email))
+      .then(function(r){return r.json();})
+      .then(function(d){ setName(d.name&&d.name!==''?d.name:'Employee'); })
       .catch(function(){ setName('Employee'); });
-  } else {
-    setName('Employee');
-  }
+  } else { setName('Employee'); }
+}
+function setName(name){
+  S.name=name; S.nameReady=true;
+  document.getElementById('name-display').textContent=name;
+  setPill('pill-name','ok');
+  checkReady();
 }
 
-function setName(name) {
-  S.name = name;
-  document.getElementById('name-display').textContent = name;
-}
-
-// ─────────────────────────────────────────
-//  LOCATION
-// ─────────────────────────────────────────
-function initLocation() {
-  if (!navigator.geolocation) { locationDone('Geolocation not supported', false); return; }
+// Location
+function initLocation(){
+  if(!navigator.geolocation){ locationDone('Not supported',false); return; }
   navigator.geolocation.getCurrentPosition(
-    function(pos) {
-      S.lat = pos.coords.latitude.toFixed(6);
-      S.lng = pos.coords.longitude.toFixed(6);
-      S.locationReady = true;
-      reverseGeocode(parseFloat(S.lat), parseFloat(S.lng));
-      checkReady();
+    function(pos){
+      S.lat=pos.coords.latitude.toFixed(6);
+      S.lng=pos.coords.longitude.toFixed(6);
+      reverseGeocode(parseFloat(S.lat),parseFloat(S.lng));
     },
-    function() { locationDone('Location denied — please allow', false); },
-    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    function(){ locationDone('Location denied — allow in browser',false); setPill('pill-location','err'); },
+    {enableHighAccuracy:true,timeout:20000,maximumAge:0}
   );
 }
-
-function reverseGeocode(lat, lng) {
-  var url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lat + '&lon=' + lng;
-  fetch(url, { headers: { 'Accept-Language': 'en' } })
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      S.address = d.display_name || (S.lat + ', ' + S.lng);
-      locationDone(S.address, true);
-    })
-    .catch(function(){
-      S.address = S.lat + ', ' + S.lng;
-      locationDone(S.address, true);
-    });
+function reverseGeocode(lat,lng){
+  fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lng+'&zoom=18&addressdetails=1',
+    {headers:{'Accept-Language':'en','User-Agent':'DPAttendance/1.0'}})
+    .then(function(r){return r.json();})
+    .then(function(d){ locationDone(d.display_name||(S.lat+', '+S.lng),true); })
+    .catch(function(){ locationDone(S.lat+', '+S.lng,true); });
+}
+function locationDone(addr,success){
+  S.address=addr; S.locationReady=true;
+  var dot=document.getElementById('status-dot');
+  var txt=document.getElementById('location-text');
+  dot.className=success?'ready':'error';
+  txt.className=success?'ready':'';
+  txt.textContent=(success?'📍 ':'⚠ ')+addr;
+  setPill('pill-location',success?'ok':'err');
+  checkReady();
 }
 
-function locationDone(addr, success) {
-  var dot  = document.getElementById('status-dot');
-  var text = document.getElementById('location-text');
-  dot.className  = success ? 'ready' : 'error';
-  text.className = success ? 'ready' : '';
-  text.textContent = (success ? '📍 ' : '⚠ ') + addr;
-  if (!S.locationReady) { S.locationReady = true; checkReady(); }
-}
-
-// ─────────────────────────────────────────
-//  CAMERA
-// ─────────────────────────────────────────
-async function initCamera() {
-  try {
-    var stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'user', width: { ideal: 720 }, height: { ideal: 960 } },
-      audio: false
-    });
-    S.stream = stream;
-    var video = document.getElementById('video');
-    video.srcObject = stream;
-    video.onloadedmetadata = function() {
-      document.getElementById('cam-loading').style.display = 'none';
-      S.cameraReady = true;
+// Camera
+async function initCamera(){
+  try{
+    var stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:720},height:{ideal:960}},audio:false});
+    S.stream=stream;
+    var video=document.getElementById('video');
+    video.srcObject=stream;
+    video.onloadedmetadata=function(){
+      document.getElementById('cam-loading').style.display='none';
+      S.cameraReady=true;
+      setPill('pill-camera','ok');
       checkReady();
     };
-  } catch(e) {
-    document.getElementById('cam-loading').innerHTML =
-      '<p style="color:#ff4d6d;padding:20px;text-align:center;font-size:13px;">📷 Camera access denied.<br><br>Please allow camera in browser settings<br>and reload the page.</p>';
+  }catch(e){
+    document.getElementById('cam-loading').innerHTML='<p style="color:#ff4d6d;padding:20px;text-align:center;font-size:12px;">📷 Camera denied.<br><br>Allow camera and reload.</p>';
+    setPill('pill-camera','err');
   }
 }
 
-// ─────────────────────────────────────────
-//  ENABLE BUTTONS
-// ─────────────────────────────────────────
-function checkReady() {
-  if (S.cameraReady && S.locationReady) {
-    document.getElementById('btn-in').disabled  = false;
-    document.getElementById('btn-out').disabled = false;
-  }
-}
+// Capture with overlay
+function captureWithOverlay(type){
+  return new Promise(function(resolve){
+    var video=document.getElementById('video');
+    var canvas=document.getElementById('overlay-canvas');
+    var W=video.videoWidth||720;
+    var H=video.videoHeight||960;
+    canvas.width=W; canvas.height=H;
+    var ctx=canvas.getContext('2d');
 
-// ─────────────────────────────────────────
-//  CAPTURE + TEXT OVERLAY
-// ─────────────────────────────────────────
-function captureWithOverlay() {
-  return new Promise(function(resolve) {
-    var video  = document.getElementById('video');
-    var canvas = document.getElementById('overlay-canvas');
-    var W = video.videoWidth  || 720;
-    var H = video.videoHeight || 960;
-    canvas.width = W; canvas.height = H;
-    var ctx = canvas.getContext('2d');
+    // Mirror draw
+    ctx.save(); ctx.translate(W,0); ctx.scale(-1,1);
+    ctx.drawImage(video,0,0,W,H); ctx.restore();
 
-    // mirror + draw
-    ctx.save();
-    ctx.translate(W, 0); ctx.scale(-1, 1);
-    ctx.drawImage(video, 0, 0, W, H);
-    ctx.restore();
+    // Bottom grey strip — 30% height
+    var stripH=Math.round(H*0.30);
+    var stripY=H-stripH;
+    ctx.fillStyle='rgba(18,18,26,0.84)';
+    ctx.fillRect(0,stripY,W,stripH);
 
-    // dark gradient at bottom
-    var grad = ctx.createLinearGradient(0, H * 0.52, 0, H);
-    grad.addColorStop(0, 'rgba(0,0,0,0)');
-    grad.addColorStop(1, 'rgba(0,0,0,0.88)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W, H);
+    // Colored top line on strip
+    ctx.fillStyle=type==='IN Time'?'#00e5a0':'#ff4d6d';
+    ctx.fillRect(0,stripY,W,3);
 
-    var now = new Date();
-    var ts  = now.toLocaleString('en-IN', {
-      day:'2-digit', month:'short', year:'numeric',
-      hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true
-    });
+    var now=new Date();
+    var ts=now.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
 
-    var pad = 18;
-    var y   = H * 0.58;
+    // Font size 15-20px based on image width
+    var fs=Math.max(15,Math.min(20,Math.round(W*0.027)));
+    var lh=fs*1.55;
+    var pad=16;
+    var y=stripY+fs+14;
 
-    function line(text, size, color, bold) {
-      ctx.font = (bold ? '600 ' : '400 ') + size + 'px DM Sans, sans-serif';
-      ctx.fillStyle = color;
-      ctx.shadowColor = 'rgba(0,0,0,0.95)';
-      ctx.shadowBlur  = 8;
-      ctx.fillText(text, pad, y);
-      y += size * 1.55;
+    ctx.shadowColor='rgba(0,0,0,0.9)'; ctx.shadowBlur=4;
+
+    // Type
+    ctx.font='600 '+(fs+1)+'px DM Sans,sans-serif';
+    ctx.fillStyle=type==='IN Time'?'#00e5a0':'#ff4d6d';
+    ctx.fillText('● '+type.toUpperCase(),pad,y); y+=lh;
+
+    // Name
+    ctx.font='600 '+fs+'px DM Sans,sans-serif';
+    ctx.fillStyle='#ffffff';
+    ctx.fillText(S.name,pad,y); y+=lh;
+
+    // Timestamp
+    ctx.font='400 '+(fs-2)+'px IBM Plex Mono,monospace';
+    ctx.fillStyle='#c0c0e0';
+    ctx.fillText('🕐 '+ts,pad,y); y+=lh;
+
+    // Lat Long
+    ctx.font='400 '+(fs-3)+'px IBM Plex Mono,monospace';
+    ctx.fillStyle='#8080aa';
+    ctx.fillText('🌐 '+S.lat+',  '+S.lng,pad,y); y+=lh;
+
+    // Address word-wrap — max 2 lines
+    ctx.font='400 '+(fs-2)+'px DM Sans,sans-serif';
+    ctx.fillStyle='#a0a0c0';
+    var maxW=W-pad*2;
+    var words=S.address.split(' ');
+    var line=''; var lc=0;
+    for(var i=0;i<words.length;i++){
+      var test=line+(line?' ':'')+words[i];
+      if(ctx.measureText(test).width>maxW&&line!==''){
+        if(lc<2){ ctx.fillText(line,pad,y); y+=lh*0.85; lc++; }
+        line=words[i];
+      } else { line=test; }
     }
+    if(line&&lc<2) ctx.fillText(line,pad,y);
 
-    // address (wrap if long)
-    var addrShort = S.address.length > 60 ? S.address.substring(0, 58) + '…' : S.address;
-    line('📍 ' + addrShort,         H * 0.021, '#ffffff',   false);
-    y += 4;
-    line(S.name,                     H * 0.030, '#00e5a0',   true);
-    line('🕐 ' + ts,                 H * 0.020, '#dde0ff',   false);
-    line('🌐 ' + S.lat + ', ' + S.lng, H * 0.018, '#8888aa', false);
+    // Watermark
+    ctx.shadowBlur=0;
+    ctx.font='600 '+Math.round(W*0.022)+'px IBM Plex Mono,monospace';
+    ctx.fillStyle='rgba(255,255,255,0.35)';
+    ctx.textAlign='right';
+    ctx.fillText('D P ASSOCIATES',W-pad,26);
+    ctx.textAlign='left';
 
-    // watermark top-right
-    ctx.shadowBlur  = 0;
-    ctx.font        = '600 ' + (H * 0.018) + 'px IBM Plex Mono, monospace';
-    ctx.fillStyle   = 'rgba(255,255,255,0.45)';
-    ctx.textAlign   = 'right';
-    ctx.fillText('D P ASSOCIATES', W - pad, pad + H * 0.022);
-    ctx.textAlign   = 'left';
-
-    var base64 = canvas.toDataURL('image/jpeg', 0.88);
-    S.capturedBase64 = base64;
-
-    // show preview
-    document.getElementById('preview-img').src = base64;
-    document.getElementById('preview-wrap').style.display = 'block';
-
+    var base64=canvas.toDataURL('image/jpeg',0.88);
+    S.capturedBase64=base64;
+    document.getElementById('preview-img').src=base64;
+    document.getElementById('preview-wrap').style.display='block';
     resolve(base64);
   });
 }
 
-function retakePhoto() {
-  S.capturedBase64 = null;
-  document.getElementById('preview-wrap').style.display = 'none';
+function retakePhoto(){
+  S.capturedBase64=null;
+  document.getElementById('preview-wrap').style.display='none';
 }
 
-// ─────────────────────────────────────────
-//  UPLOAD PHOTO → Apps Script
-// ─────────────────────────────────────────
-function uploadPhoto(base64) {
-  return fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify({ action: 'uploadPhoto', name: S.name, image: base64 })
-  })
-  .then(function(r){ return r.json(); })
-  .then(function(d){ return d.url || ''; })
-  .catch(function(){ return ''; });
+// Upload photo
+function uploadPhoto(base64){
+  return fetch(APPS_SCRIPT_URL,{
+    method:'POST', headers:{'Content-Type':'text/plain'},
+    body:JSON.stringify({action:'uploadPhoto',name:S.name,image:base64})
+  }).then(function(r){return r.json();}).then(function(d){return d.url||'';}).catch(function(){return '';});
 }
 
-// ─────────────────────────────────────────
-//  SUBMIT ATTENDANCE → Apps Script
-// ─────────────────────────────────────────
-async function submitAttendance(type) {
-  if (S.submitting) return;
-  S.submitting = true;
+// Submit
+async function submitAttendance(type){
+  if(S.submitting) return;
+  S.submitting=true;
+  var btnIn=document.getElementById('btn-in');
+  var btnOut=document.getElementById('btn-out');
+  var btn=type==='IN Time'?btnIn:btnOut;
+  btn.innerHTML='<div class="btn-spinner"></div>';
+  btnIn.disabled=btnOut.disabled=true;
 
-  var btnIn  = document.getElementById('btn-in');
-  var btnOut = document.getElementById('btn-out');
-  var btn    = type === 'IN' ? btnIn : btnOut;
+  try{
+    var base64=await captureWithOverlay(type);
+    var imageUrl=await uploadPhoto(base64);
+    var now=new Date();
+    var timeStr=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true});
 
-  btn.innerHTML = '<div class="btn-spinner"></div>';
-  btnIn.disabled = btnOut.disabled = true;
-
-  try {
-    // 1. Capture photo with overlay
-    var base64 = await captureWithOverlay();
-
-    // 2. Upload photo
-    var imageUrl = await uploadPhoto(base64);
-
-    // 3. Build payload
-    var now  = new Date();
-    var data = {
-      action   : 'submit',
-      name     : S.name,
-      date     : now.toLocaleDateString('en-IN'),
-      type     : type,
-      address  : S.address,
-      lat      : S.lat,
-      lng      : S.lng,
-      imageUrl : imageUrl,
-      phone    : ''
+    var data={
+      action:'submit', name:S.name, email:S.email,
+      date:now.toLocaleDateString('en-IN'),
+      type:type, address:S.address,
+      lat:S.lat, lng:S.lng,
+      imageUrl:imageUrl, phone:''
     };
 
-    // 4. Submit to Apps Script
-    var res = await fetch(APPS_SCRIPT_URL, {
-      method : 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body   : JSON.stringify(data)
-    });
-    var json = await res.json();
+    var res=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(data)});
+    var json=await res.json();
 
-    if (json.status === 'success') {
-      showToast('✓ ' + type + ' marked — ' +
-        now.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit', hour12:true }),
-        'success');
-    } else {
-      throw new Error(json.message || 'Server error');
-    }
+    if(json.status==='success'){
+      S.lastType=type; S.lastTime=timeStr; S.lastAddress=S.address;
+      showLastSubmission(type,timeStr);
+      showToast('✓ '+type+' marked at '+timeStr,'success');
+    } else { throw new Error(json.message||'Server error'); }
 
-    setTimeout(function() {
-      S.submitting = false;
-      restoreButtons();
-    }, 5000);
-
-  } catch(err) {
-    showToast('❌ Failed: ' + (err.message || err), 'error');
-    S.submitting = false;
-    restoreButtons();
+    setTimeout(function(){ S.submitting=false; restoreButtons(); },4000);
+  }catch(err){
+    showToast('❌ '+(err.message||'Submit failed'),'error');
+    S.submitting=false; restoreButtons();
+    document.getElementById('preview-wrap').style.display='none';
   }
 }
 
-function restoreButtons() {
-  document.getElementById('btn-in').innerHTML  = '<span>▶</span> IN';
-  document.getElementById('btn-out').innerHTML = '<span>■</span> OUT';
-  document.getElementById('btn-in').disabled   = false;
-  document.getElementById('btn-out').disabled  = false;
+function restoreButtons(){
+  document.getElementById('btn-in').innerHTML='▶ IN Time';
+  document.getElementById('btn-out').innerHTML='■ OUT Time';
+  var ready=S.locationReady&&S.nameReady&&S.cameraReady;
+  document.getElementById('btn-in').disabled=!ready;
+  document.getElementById('btn-out').disabled=!ready;
 }
 
-// ─────────────────────────────────────────
-//  TOAST
-// ─────────────────────────────────────────
+// Last submission + Share
+function showLastSubmission(type,time){
+  var color=type==='IN Time'?'#00e5a0':'#ff4d6d';
+  document.getElementById('last-submission-text').innerHTML=
+    '<span style="color:'+color+';font-weight:600;">'+type+'</span>'
+    +' &nbsp;at&nbsp; <span style="font-family:IBM Plex Mono,monospace;font-size:12px;">'+time+'</span>';
+  document.getElementById('last-submission').style.display='block';
+}
+
+function shareOnWhatsApp(){
+  var msg='✅ *Attendance Marked*\n'
+    +'👤 *Name:* '+S.name+'\n'
+    +'📌 *Type:* '+S.lastType+'\n'
+    +'🕐 *Time:* '+S.lastTime+'\n'
+    +'📍 *Location:* '+S.lastAddress+'\n'
+    +'🌐 *Lat/Lng:* '+S.lat+', '+S.lng;
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+// Toast
 var toastTimer;
-function showToast(msg, type) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className   = 'show ' + (type || '');
+function showToast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.className='show '+(type||'');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){ t.className = ''; }, 3800);
+  toastTimer=setTimeout(function(){t.className='';},3800);
 }
 
-// ─────────────────────────────────────────
-//  INIT
-// ─────────────────────────────────────────
-window.onload = function() {
-  loadName();
-  initLocation();
-  initCamera();
-};
+window.onload=function(){ loadName(); initLocation(); initCamera(); };
 </script>
 </body>
 </html>
