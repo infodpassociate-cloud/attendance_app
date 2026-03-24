@@ -471,13 +471,27 @@ function showLastSubmission(type,time){
 }
 
 function shareOnWhatsApp(){
-  var msg='✅ *Attendance Marked*\n'
-    +'👤 *Name:* '+S.name+'\n'
-    +'📌 *Type:* '+S.lastType+'\n'
-    +'🕐 *Time:* '+S.lastTime+'\n'
-    +'📍 *Location:* '+S.lastAddress+'\n'
-    +'🌐 *Lat/Lng:* '+S.lat+', '+S.lng;
-  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  // Step 1: Download the overlay image to phone gallery
+  if(S.capturedBase64){
+    var a=document.createElement('a');
+    a.href=S.capturedBase64;
+    a.download='attendance_'+S.name.replace(/\s+/g,'_')+'_'+S.lastType.replace(/\s+/g,'_')+'.jpg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  // Step 2: Open WhatsApp with text after short delay
+  setTimeout(function(){
+    var msg='✅ *Attendance Marked*\n'
+      +'👤 *Name:* '+S.name+'\n'
+      +'📌 *Type:* '+S.lastType+'\n'
+      +'🕐 *Time:* '+S.lastTime+'\n'
+      +'📍 *Location:* '+S.lastAddress+'\n'
+      +'🌐 *Lat/Lng:* '+S.lat+', '+S.lng+'\n\n'
+      +'_Image downloaded to your gallery — attach it manually in WhatsApp_';
+    window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  }, 800);
 }
 
 // Toast
